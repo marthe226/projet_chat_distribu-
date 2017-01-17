@@ -5,24 +5,26 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import mesobjets.Node;
-import mesobjets.Ring;
-import mesobjets.User;
+import mesobjets.Client;
+import mesobjets.Pair;
+import mesobjets.Chord;
+import mesobjets.Client;
 
 
 public class System_de_chat implements Runnable {
 	
 	int port;
 	public ServerSocket serveur;
-	Ring anneau;
-	ArrayList<User> lesclients;
+	Chord anneau;
+	ArrayList<Client> lesclients;
 	ArrayList<MesThreads> listeThreads;
+	private Socket socket;
 	
 	//les constructeurs
 	public System_de_chat(int numPort) throws IOException{
 	this.port= numPort;
 	this.serveur= new ServerSocket(this.port);	
-	this.anneau= new Ring();
+	this.anneau= new Chord();
 	this.lesclients = new ArrayList<>();
 	this.listeThreads= new ArrayList<MesThreads>();
 	}
@@ -30,15 +32,15 @@ public class System_de_chat implements Runnable {
 	public System_de_chat() throws IOException{
 	this.port=0;	
 	this.serveur= new ServerSocket(this.port);	
-	this.anneau= new Ring();
+	this.anneau= new Chord();
 	this.lesclients = new ArrayList<>();
 	this.listeThreads= new ArrayList<MesThreads>();
 	}
 
-	@SuppressWarnings("unused")
+	
 	@Override
 	public synchronized void run() {
-		Socket socket = null;
+		socket = new Socket();
 		 while(true){
 			 try {
 				socket= this.serveur.accept();
@@ -48,38 +50,42 @@ public class System_de_chat implements Runnable {
 				e.printStackTrace();
 				System.exit(-1);
 			}
-			 User client = new User( socket.getRemoteSocketAddress(),this);
+			 
+			 //le nouveau client qui veut integrer l'anneau
+			 Client client = new Client( socket.getRemoteSocketAddress(),this);
 			 MesThreads mesthread= new MesThreads(this, client, socket);
 			 Thread thread = new Thread(mesthread);
 			 this.listeThreads.add(mesthread);
 			 lesclients.add(client);
-			 Node noeud = new Node(client);
-			 anneau.AlgoAjoutNoeudChord(noeud);
+			 Pair noeud = new Pair(client);
+			 anneau.joinMainChord(noeud);
 			 thread.start();
-			 
+			
+			 try {
 			 if(socket == null){
-				 try {
+				
 					socket.close();
-				} catch (IOException e) {
+					System.out.println("socket du client "+ socket.getInetAddress()+"sur le port"+ socket.getPort()+"est terminé");
+				} }
+			 catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					e.printStackTrace(); 
+					System.out.println("erreur de fermeture de socket");
 					System.exit(-1);
 				}
 				 
 			 }
 			 
 		 }
-		
-	}
-	public ArrayList<User> getLesclients() {
+	public ArrayList<Client> getLesclients() {
 		return lesclients;
 	}
 
-	public void setLesclients(ArrayList<User> lesclients) {
+	public void setLesclients(ArrayList<Client> lesclients) {
 		this.lesclients = lesclients;
 	}
 	public static void main(String[] args) throws IOException {
-		System_de_chat sr = new System_de_chat(1998);
+		System_de_chat sr = new System_de_chat(1995);
 		sr.run();
 	}
 }

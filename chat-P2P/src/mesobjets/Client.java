@@ -1,5 +1,6 @@
 package mesobjets;
 
+import java.net.ServerSocket;
 import java.net.SocketAddress;
 
 import javax.swing.JOptionPane;
@@ -7,18 +8,21 @@ import javax.swing.JOptionPane;
 import controleur.System_de_chat;
 
 
-public class User {
+public class Client {
 	
-	public SocketAddress ipAdress;
-	public String Identifiant = null;
-	public System_de_chat server;
+	private SocketAddress ipAdress;
+	private ServerSocket seversocket;
+	private String Identifiant = null;
+	private System_de_chat server;
+
 	
 	
-	public  User() {
+	
+	public  Client() {
 		
 	}
 	
-	public User(SocketAddress remoteSocketAddress, System_de_chat server) {
+	public Client(SocketAddress remoteSocketAddress, System_de_chat server) {
 		this.ipAdress = remoteSocketAddress;
 		this.server= server;
 		this.Identifiant = JOptionPane.showInputDialog(null, "Entrez votre id: ", " Identifiant",JOptionPane.PLAIN_MESSAGE);
@@ -42,5 +46,7 @@ public class User {
 	public void setIdentifiant(String identifiant) {
 		Identifiant = identifiant;
 	}
+	
+	
 
 }

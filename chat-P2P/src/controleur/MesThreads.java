@@ -7,12 +7,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-import mesobjets.User;
+import mesobjets.Client;
 
 public class MesThreads implements Runnable  {
 
 	System_de_chat server;
-	User client;
+	Client client;
 	Socket connexion ;
 	Boolean vrai = true;
 	InputStreamReader monInputStream;
@@ -31,7 +31,7 @@ public class MesThreads implements Runnable  {
 	Scanner scan = new Scanner(System.in);
 	
 	
-	public MesThreads (System_de_chat server, User client, Socket ma_connexion){
+	public MesThreads (System_de_chat server, Client client, Socket ma_connexion){
 		this.server= server;
 		this.connexion= ma_connexion;
 		this.client= client;
@@ -105,7 +105,7 @@ public class MesThreads implements Runnable  {
 				byte[] hash = Hachage.gethashkey(Donnees_Recues.toString());
 				System.out.format("lol \n %d caracteres recu  ... hash hexadécimale  %s:\n", Donnees_Recues.length(),
 						Hachage.bytesToHex(hash));
-				System.out.format("Je termine la connection avec %s :\n", nom_Client);
+				System.out.println("Je termine la connection avec" + nom_Client);
 				stop = true;
 				return (stop);
 			}
