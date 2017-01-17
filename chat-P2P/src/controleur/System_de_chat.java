@@ -65,7 +65,7 @@ public class System_de_chat implements Runnable {
 			 if(socket == null){
 				
 					socket.close();
-					System.out.println("socket du client "+ socket.getInetAddress()+"sur le port"+ socket.getPort()+"est terminé");
+					System.out.println("socket du client "+ socket.getInetAddress()+"sur le port"+ socket.getPort()+"est terminÃ©");
 				} }
 			 catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -77,6 +77,14 @@ public class System_de_chat implements Runnable {
 			 }
 			 
 		 }
+	
+	public int getPort() {
+		return port;
+	}
+	public void setPort(int port) {
+		this.port = port;
+	}
+	
 	public ArrayList<Client> getLesclients() {
 		return lesclients;
 	}
