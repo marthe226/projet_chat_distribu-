@@ -31,6 +31,7 @@ public class MesThreads implements Runnable  {
 	
 	//recuperer le message envoyer
 	Scanner scan = new Scanner(System.in);
+	boolean stopfinal=true;
 	
 	
 	public MesThreads (SystemDeChat server, Client client, Socket ma_connexion){
@@ -60,7 +61,7 @@ public class MesThreads implements Runnable  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		while (true) {
+		while (stopfinal) {
 			c_port = ma_connexion.getPort();
 			c_ip = ma_connexion.getInetAddress().toString();
 			
@@ -70,6 +71,9 @@ public class MesThreads implements Runnable  {
 			try {
 
 				Service_Client(ma_connexion);
+				if(Service_Client(ma_connexion)== true)
+					stopfinal= false;
+				
 
 			} catch (IOException e) {
 				System.exit(-1);
@@ -88,7 +92,7 @@ public class MesThreads implements Runnable  {
 			}
 		}
 	}
-	public synchronized void Service_Client(Socket la_connection) throws IOException {
+	public synchronized boolean Service_Client(Socket la_connection) throws IOException {
 
 		final String Finish = "stop";
 		Boolean stop = false;
@@ -124,9 +128,9 @@ public class MesThreads implements Runnable  {
 				byte[] hash = Hachage.gethashkey(Donnees_Recues.toString());
 				System.out.format("lol \n %d caracteres recu  ... hash hexadécimale  %s:\n", Donnees_Recues.length(),
 						Hachage.bytesToHex(hash));
-				System.out.println("Je termine la connection avec" + client.getIdentifiant());
+				System.out.println("Je termine la connection avec " + client.getIdentifiant());
 				stop = true;
-				//return (stop);
+				return (stop);
 				
 			}
 			Donnees_Recues.append(message_lu);
@@ -134,7 +138,7 @@ public class MesThreads implements Runnable  {
 			
 		}
 
-		//return stop;
+		return stop;
 	}
 }
 
