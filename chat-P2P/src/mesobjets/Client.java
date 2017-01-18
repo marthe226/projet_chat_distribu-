@@ -5,7 +5,7 @@ import java.net.SocketAddress;
 
 import javax.swing.JOptionPane;
 
-import controleur.System_de_chat;
+import controleur.SystemDeChat;
 
 
 public class Client {
@@ -13,7 +13,7 @@ public class Client {
 	private SocketAddress ipAdress;
 	private ServerSocket seversocket;
 	private String Identifiant = null;
-	private System_de_chat server;
+	private SystemDeChat server;
 
 	
 	
@@ -22,15 +22,15 @@ public class Client {
 		
 	}
 	
-	public Client(SocketAddress remoteSocketAddress, System_de_chat server) {
+	public Client(SocketAddress remoteSocketAddress, SystemDeChat server) {
 		this.ipAdress = remoteSocketAddress;
 		this.server= server;
 		this.Identifiant = JOptionPane.showInputDialog(null, "Entrez votre id: ", " Identifiant",JOptionPane.PLAIN_MESSAGE);
 	}
-	public System_de_chat getServer() {
+	public SystemDeChat getServer() {
 		return server;
 	}
-	public void setServer(System_de_chat server) {
+	public void setServer(SystemDeChat server) {
 		this.server = server;
 	}
 

@@ -5,6 +5,7 @@ public class Pair {
 	Client client;
 	String suivant;
 	String precedent;
+	Long id;
 	
 	//nos méthodes
 	
@@ -20,6 +21,7 @@ public class Pair {
 		//super();
 		
 	}
+	
 	
 	
 	//les get et set de nos differents attributs
