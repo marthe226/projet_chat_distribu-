@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Scanner;
 
 import mesobjets.ChatMessage;
@@ -47,12 +46,12 @@ public class MesThreads implements Runnable  {
 
 	@Override
 	public void run() {
-		try {
-			ma_connexion.setSoTimeout(10);
+		/*try {
+			//ma_connexion.setSoTimeout(10);
 		} catch (SocketException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}*/
 		try {
 			monInputStream = new InputStreamReader(ma_connexion.getInputStream());
 			flux_entrant = new BufferedReader(monInputStream);
@@ -62,12 +61,12 @@ public class MesThreads implements Runnable  {
 			e.printStackTrace();
 		}
 		while (true) {
-
 			c_port = ma_connexion.getPort();
 			c_ip = ma_connexion.getInetAddress().toString();
 			
 			System.out.println("Un client est arriv� avec IP : " +c_ip+ " sur le port "+ c_port );
 			System.out.println("Welcome "+ client.getIdentifiant());
+
 			try {
 
 				Service_Client(ma_connexion);
@@ -75,8 +74,11 @@ public class MesThreads implements Runnable  {
 			} catch (IOException e) {
 				System.exit(-1);
 			}
+			
 			try {
 				if (ma_connexion != null) {
+					flux_entrant.close();
+					flux_sortant.close();
 					ma_connexion.close();
 					System.out.format("Service du client  %s sur le port %d terminé\n", c_ip, c_port);
 				}
@@ -86,23 +88,25 @@ public class MesThreads implements Runnable  {
 			}
 		}
 	}
-	public synchronized Boolean Service_Client(Socket la_connection) throws IOException {
+	public synchronized void Service_Client(Socket la_connection) throws IOException {
 
 		final String Finish = "stop";
 		Boolean stop = false;
-		InputStreamReader isr = new InputStreamReader(ma_connexion.getInputStream(), "UTF-8");
+		InputStreamReader isr = new InputStreamReader(la_connection.getInputStream(), "UTF-8");
 		BufferedReader flux_entrant = new BufferedReader(isr);
-		flux_sortant = new PrintWriter(ma_connexion.getOutputStream(), true);
+		flux_sortant = new PrintWriter(la_connection.getOutputStream(), true);
 		System.out.println("Mon Tampon pour ecrire  attache ");
 		System.out.format("Pret à servir  IP %s  sur le port %d\n", c_ip, c_port);
 		flux_sortant.format("Hello %s  sur le port %d,  vous etes, pour faire simple, disons Admis\n", c_ip, c_port);
+		flux_sortant.println("Pour quitter la conversation,saisir 'stop'");
 		String nom_Client = "un anonyme";
-		String message_lu = new String();
+		String message_lu ;
 		int line_num = 0;
 		Boolean connexion_non_terminee = true;
 		StringBuffer Donnees_Recues = new StringBuffer();
 
 		while (connexion_non_terminee) {
+		
 			 message_lu = flux_entrant.readLine();
 			System.out.format("%d: ->  [%s]\n", line_num, message_lu);
 			for (int i = 0; i < server.listeThreads.size(); i++) {
@@ -110,7 +114,7 @@ public class MesThreads implements Runnable  {
 
 			}
 			line_num++;
-			if (message_lu.startsWith(Finish)) {
+			if (message_lu.contains(Finish)) {
 
 				System.out.println("Reception de  " + Finish + " -> Transmission finie");
 				connexion_non_terminee = false;
@@ -122,7 +126,7 @@ public class MesThreads implements Runnable  {
 						Hachage.bytesToHex(hash));
 				System.out.println("Je termine la connection avec" + client.getIdentifiant());
 				stop = true;
-				return (stop);
+				//return (stop);
 				
 			}
 			Donnees_Recues.append(message_lu);
@@ -130,6 +134,7 @@ public class MesThreads implements Runnable  {
 			
 		}
 
-		return stop;
+		//return stop;
 	}
 }
+

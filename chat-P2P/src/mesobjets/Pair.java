@@ -1,5 +1,7 @@
 package mesobjets;
 
+import java.util.ArrayList;
+
 public class Pair {
 	
 	Client client;
@@ -45,7 +47,7 @@ public class Pair {
 		this.precedent = precedent;
 	}
 	
-	public  ArrayList<Integer> GetChatRoomsList() {
+	/*public  ArrayList<Integer> GetChatRoomsList() {
 		ArrayList<Integer> idlist = new ArrayList<Integer>();
 		for (int i = 0; i < chatroomslist.size(); i++) {
 			idlist.add(chatroomslist.get(i).getPort());
@@ -80,6 +82,6 @@ public class Pair {
 
 	public void ReadChatRoom(long chatkey) {
 
-	}
+	}*/
 
 }
