@@ -7,7 +7,7 @@ public class Pair {
 	String precedent;
 	Long id;
 	
-	//nos méthodes
+	//nos mï¿½thodes
 	
 	
 	
@@ -43,6 +43,43 @@ public class Pair {
 	}
 	public void setPrecedent(String precedent) {
 		this.precedent = precedent;
+	}
+	
+	public  ArrayList<Integer> GetChatRoomsList() {
+		ArrayList<Integer> idlist = new ArrayList<Integer>();
+		for (int i = 0; i < chatroomslist.size(); i++) {
+			idlist.add(chatroomslist.get(i).getPort());
+		}
+		return idlist;
+	}
+	
+	public void JoinChatRoom(int chatkey) throws IOException {
+		// rejoint la salle si elle existe, la crÃ©e sinon.
+		int l= 0;
+    	for (int i = 0; i <chatroomslist.size(); i++) {
+			if (chatroomslist.get(i).getPort()==chatkey){
+				ArrayList<Client> users = chatroomslist.get(i).getLesclients();
+				users.add(this.client);
+				chatroomslist.get(i).setLesclients(users);
+			}  else {
+				l=l+1 ;
+			}
+			if (l==chatroomslist.size()){
+				System_de_chat sdc = new System_de_chat(chatkey);
+				ArrayList<Client> user1 = new ArrayList<Client>() ;
+				user1.add(this.client);
+				sdc.setLesclients(user1);
+			}
+		}
+		
+	}
+	
+	public void SendToChatRoom(String s, long chatkey) {
+
+	}
+
+	public void ReadChatRoom(long chatkey) {
+
 	}
 
 }
