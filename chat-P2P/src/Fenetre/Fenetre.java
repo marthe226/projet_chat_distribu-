@@ -36,8 +36,8 @@ public class Fenetre {
 
 		// Création du bouton envoyer
 		JButton send = new JButton("Envoyer");
-		JButton chat = new JButton("Nouvelle discution");
-		JButton list = new JButton("Voir toutes les conversation");
+		JButton chat = new JButton("Nouvelle discussion");
+		JButton list = new JButton("Voir toutes les conversations");
 
 		// Création de la zone de texte pour taper son message
 
